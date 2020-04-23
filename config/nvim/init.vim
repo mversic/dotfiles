@@ -255,6 +255,10 @@ let g:ale_linters = {
   \ 'rust': ['rls']
 \ }
 
+" List both test and examples for rust
+let g:ale_rust_cargo_check_tests = 1
+let g:ale_rust_cargo_check_examples = 1
+
 " Position cursor to next error
 nmap [w <plug>(ale_previous_wrap)
 nmap ]w <plug>(ale_next_wrap)
