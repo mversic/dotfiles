@@ -67,6 +67,9 @@ Plug 'dominikduda/vim_current_word'
 " Pasting fix (Context-aware pasting)
 Plug 'sickill/vim-pasta'
 
+" Visually distinct indentation
+Plug 'Yggdroot/indentLine'
+
 " Git diff indicators
 Plug 'mhinz/vim-signify'
 
