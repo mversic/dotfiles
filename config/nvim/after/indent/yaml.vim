@@ -1,2 +1,1 @@
-" Dont' reindent when commenting
-setlocal indentkeys-=0#
+setlocal indentkeys-=0#     " Dont' reindent when commenting first line

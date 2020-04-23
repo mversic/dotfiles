@@ -1,2 +1,1 @@
-" Use indendation based folding
-setlocal foldmethod=indent
+setlocal foldmethod=indent  " Use indendation based folding

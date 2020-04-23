@@ -174,7 +174,7 @@ nnoremap <silent> <leader>w :set wrap!<CR>
 set expandtab               " insert spaces rather than tabs for <Tab>
 set tabstop=8               " the visible width of tabs
 set softtabstop=4           " edit as if the tabs are 4 characters wide
-set shiftwidth=4            " number of spaces to use for indent and unindent
+set shiftwidth=4            " number of spaces used for indent and unindent
 set shiftround              " round indent to a multiple of 'shiftwidth'
 " }}}
 
