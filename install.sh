@@ -40,7 +40,7 @@ install/init.sh
 # Optional
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 rustup component add rls rust-src #rust-analysis
-sudo pacman -S flake8
+pip install 'python-language-server[all]'
 
 echo "Installation complete. Restart your computer"
 
