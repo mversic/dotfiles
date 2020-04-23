@@ -1,7 +1,3 @@
-" Enables Vim features
-" (Must be first line)
-set nocompatible
-
 " Source plugins
 source ~/.config/nvim/plugins.vim
 
@@ -24,7 +20,6 @@ nnoremap <silent> <leader>ml :setlocal invmodeline <bar> doautocmd BufRead<cr>
 "" Avoid accidental quits with confirmation menu
 "cnoremap <silent> q<CR>  :call ConfirmQuit(0)<CR>
 "cnoremap <silent> x<CR>  :call ConfirmQuit(1)<CR>
-"
 "function! ConfirmQuit(writeFile)
 "    if (a:writeFile)
 "        if (expand('%:t')=="")
@@ -177,7 +172,6 @@ nnoremap <silent> <leader>w :set wrap!<CR>
 " ↳ Indentation {{{
 "----------------------------------------------------------------------------------------
 set expandtab               " insert spaces rather than tabs for <Tab>
-set smartindent             " make automatic indentation upon new line
 set tabstop=8               " the visible width of tabs
 set softtabstop=4           " edit as if the tabs are 4 characters wide
 set shiftwidth=4            " number of spaces to use for indent and unindent
@@ -190,7 +184,7 @@ set foldmethod=syntax       " define folds by language syntax
 set foldlevelstart=1        " don't autofold n outer folds
 set foldnestmax=3           " deepest fold is 3 levels set foldlevel=2
 set foldlevel=3
-set foldcolumn=2
+set foldcolumn=1
 set foldtext=MyFoldText('\ ')   " string representation of fold
 
 " toggle folds with Enter
@@ -229,7 +223,7 @@ function! MyFoldText(string)
     let line = substitute(line, pat, '', '')
 
 "   let line = substitute(line, matchstr(&l:cms,
-"	    \ '^.\{-}\ze%s').'\?\s*'. split(&l:fmr,',')[0].'\s*\d\+', '', '')
+"           \ '^.\{-}\ze%s').'\?\s*'. split(&l:fmr,',')[0].'\s*\d\+', '', '')
 
     let w = get(g:, 'custom_foldtext_max_width', winwidth(0)) - &foldcolumn - (&number ? 8 : 0)
     let foldSize = 1 + v:foldend - v:foldstart
@@ -237,9 +231,9 @@ function! MyFoldText(string)
     let foldLevelStr = '+'. v:folddashes
     let lineCount = line("$")
     if exists("*strwdith")
-	let expansionString = repeat(a:string, w - strwidth(foldSizeStr.line.foldLevelStr))
+        let expansionString = repeat(a:string, w - strwidth(foldSizeStr.line.foldLevelStr))
     else
-	let expansionString = repeat(a:string, w - strlen(substitute(foldSizeStr.line.foldLevelStr, '.', 'x', 'g')))
+        let expansionString = repeat(a:string, w - strlen(substitute(foldSizeStr.line.foldLevelStr, '.', 'x', 'g')))
     endif
     return line . expansionString . foldSizeStr . foldLevelStr
 endf
