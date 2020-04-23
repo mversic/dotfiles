@@ -70,6 +70,9 @@ Plug 'sickill/vim-pasta'
 " Visually distinct indentation
 Plug 'Yggdroot/indentLine'
 
+" Search for selection in visual mode with * and #
+Plug 'nelstrom/vim-visual-star-search'
+
 " Git diff indicators
 Plug 'mhinz/vim-signify'
 

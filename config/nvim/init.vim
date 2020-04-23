@@ -368,18 +368,6 @@ else
     highlight CurrentWord      guibg=#fdf6e3
 endif
 
-" Search for selected text in visual mode with * and #
-vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
-vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
-
-"TODO: Consider using junegunn/vim-slash
-function! s:VSetSearch()
-  let temp = @@
-  norm! gvy
-  let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
-  let @@ = temp
-endfunction
-
 " ↳ Fuzzy file finder {{{
 "----------------------------------------------------------------------------------------
 let g:fzf_prefer_tmux = 1
