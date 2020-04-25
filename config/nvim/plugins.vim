@@ -21,15 +21,17 @@ endif
 "----------------------------------------------------------------------------------------
 call plug#begin('~/.config/nvim/plugged')
 
+" Sensible Vim defaults
 Plug 'tpope/vim-sensible'
 
-"  1. Colorschemes and statuslines
+"  1. Colorschemes and statuslines {{{
 "----------------------------------------------------------------------------------------
 Plug 'lifepillar/vim-solarized8'
 Plug 'itchyny/lightline.vim'
 Plug 'bling/vim-bufferline'
+" }}}
 
-"  2. Lint and autocompletion
+"  2. Lint and autocompletion {{{
 "----------------------------------------------------------------------------------------
 Plug 'dense-analysis/ale'
 Plug 'Shougo/deoplete.nvim'
@@ -37,8 +39,9 @@ Plug 'Shougo/deoplete.nvim'
 " Snippet support
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+" }}}
 
-"  3. Project navigation
+"  3. Project navigation {{{
 "----------------------------------------------------------------------------------------
 " Fuzzy file finder
 Plug 'junegunn/fzf.vim'
@@ -61,8 +64,9 @@ Plug 'dietsche/vim-lastplace'
 
 " Highlight twin words under the cursor
 Plug 'dominikduda/vim_current_word'
+" }}}
 
-"  4. Utilities
+"  4. Utilities {{{
 "----------------------------------------------------------------------------------------
 " Pasting fix (Context-aware pasting)
 Plug 'sickill/vim-pasta'
@@ -88,16 +92,22 @@ Plug 'simnalamburt/vim-mundo', { 'on': ['MundoToggle'] }
 
 "TODO: Use if folding is slow
 "Plug 'Konfekt/FastFold'
+" }}}
 
 " TODO: Interesting plugins
 "----------------------------------------------------------------------------------------
 "Plug 'tpope/vim-dispatch'
 "Plug 'tpope/vim-surround'
-"Plug 'tpope/vim-fugitive'
 "Plug 'junegunn/gv.vim'
 "Plug 'vim-scripts/YankRing.vim'
 "Plug 'markonm/traces.vim'
 "Plug 'Valloric/ListToggle'
+
+"Plug 'tpope/vim-fugitive'
+"Plug 'jreybert/vimgit'
+"Plug 'rhysd/git-messenger.vim'
+
+"Plug 'troydm/zoomwintab.vim'
 
 call plug#end()
 

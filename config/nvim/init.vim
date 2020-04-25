@@ -239,7 +239,7 @@ function! MyFoldText(string)
 endf
 
 " Enable folding for vim config file specifically
-autocmd BufRead *vimrc,*init.vim setlocal foldmethod=marker foldlevel=0
+autocmd BufRead *vimrc,*init.vim,*plugins.vim setlocal foldmethod=marker foldlevel=0
 " }}}
 " }}}
 
