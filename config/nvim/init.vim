@@ -252,8 +252,12 @@ highlight ALEErrorSign   guibg=none
 
 let g:ale_linters = {
   \ 'python': ['pyls'],
-  \ 'rust': ['rls']
+  \ 'rust': ['rls'],
+  \ 'go': ['gopls'],
 \ }
+
+" Location of go language server executable
+let g:ale_go_gopls_executable = $HOME . '/go/bin/gopls'
 
 " List both test and examples for rust
 let g:ale_rust_cargo_check_tests = 1
