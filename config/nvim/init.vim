@@ -478,9 +478,6 @@ highlight DiffDelete guibg=none
 "----------------------------------------------------------------------------------------
 " ↳ Movement keys {{{
 "----------------------------------------------------------------------------------------
-" Jump to matching brace, bracket, ...
-nmap <tab> %
-
 " Move over wrapped lines in practical manner
 nnoremap <silent> <expr> j  v:count ?  'j' : 'gj'
 nnoremap <silent> <expr> k  v:count ?  'k' : 'gk'
