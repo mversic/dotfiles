@@ -94,6 +94,11 @@ Plug 'simnalamburt/vim-mundo', { 'on': ['MundoToggle'] }
 "Plug 'Konfekt/FastFold'
 " }}}
 
+" 5. Language specific support {{{
+"----------------------------------------------------------------------------------------
+Plug 'cespare/vim-toml'
+" }}}
+
 " TODO: Interesting plugins
 "----------------------------------------------------------------------------------------
 "Plug 'tpope/vim-dispatch'
@@ -108,6 +113,8 @@ Plug 'simnalamburt/vim-mundo', { 'on': ['MundoToggle'] }
 "Plug 'rhysd/git-messenger.vim'
 
 "Plug 'troydm/zoomwintab.vim'
+"Plug 'tpope/vim-commentary'
+"Plug 'kana/vim-textobj-entire'
 
 call plug#end()
 
