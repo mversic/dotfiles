@@ -97,6 +97,7 @@ Plug 'simnalamburt/vim-mundo', { 'on': ['MundoToggle'] }
 " 5. Language specific support {{{
 "----------------------------------------------------------------------------------------
 Plug 'cespare/vim-toml'
+Plug 'fatih/vim-go'
 " }}}
 
 " TODO: Interesting plugins
