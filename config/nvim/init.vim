@@ -284,7 +284,9 @@ nmap ]w <plug>(ale_next_wrap)
 let g:AutoPairsMultilineClose = 0
 
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_smart_case = 1
+call deoplete#custom#option({
+  \ 'smart_case': v:true,
+\ })
 let g:UltiSnipsExpandTrigger="<C-Space>"
 
 " Don't abbreviate the list of suggested comletions
