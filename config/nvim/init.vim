@@ -272,6 +272,12 @@ let g:ale_go_gopls_executable = $HOME . '/go/bin/gopls'
 let g:ale_rust_cargo_check_tests = 1
 let g:ale_rust_cargo_check_examples = 1
 
+" Disable vim-go autocompletion and lint
+let g:go_code_completion_enabled = 0
+let g:go_gopls_enabled = 0
+let g:go_fmt_autosave = 0
+let g:go_echo_go_info = 0
+
 " Position cursor to next error
 nmap [w <plug>(ale_previous_wrap)
 nmap ]w <plug>(ale_next_wrap)
