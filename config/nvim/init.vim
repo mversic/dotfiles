@@ -185,9 +185,6 @@ set foldlevel=3
 set foldcolumn=1
 set foldtext=MyFoldText('\ ')   " string representation of fold
 
-" toggle folds with Enter
-nnoremap <CR> za
-
 "function! MyFoldText()
 "    let line = getline(v:foldstart)
 "    let nucolwidth = &fdc + &number * &numberwidth + 2
