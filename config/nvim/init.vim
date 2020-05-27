@@ -123,17 +123,6 @@ endif
 
 " Don't display signcolumn when listing registers
 let g:peekaboo_window = "vert bo 30new | set scl=no"
-
-" Split screen
-nnoremap <leader>v <C-w>v
-nnoremap <leader>s <C-w>s
-
-" Viewport switching
-nnoremap <leader>w <C-w>w
-nnoremap <leader>h <C-w>h
-nnoremap <leader>j <C-w>j
-nnoremap <leader>k <C-w>k
-nnoremap <leader>l <C-w>l
 " }}}
 
 " ↳ Viewport style {{{
