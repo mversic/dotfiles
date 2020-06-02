@@ -13,6 +13,7 @@ cd "$TMP_DIR"
 #----------------------------------------------------------------------------------------
 sudo pacman -Syy
 
+sudo pacman -S --noconfirm alacritty
 sudo pacman -S --noconfirm ripgrep fd bat fzf # exa runiq ion watchexec
 sudo pacman -S --noconfirm tmux htop python-pip
 sudo pacman -S --noconfirm xsel i3-wm picom redshift

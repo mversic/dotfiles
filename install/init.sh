@@ -24,19 +24,6 @@ if ! [[ $SHELL =~ .*zsh.* ]]; then
 fi
 
 ##############################
-## Solarized for Gnome
-##############################
-#echo -e "\n\nSetting up terminal theme(solarized)"
-#echo "=============================="
-#sudo apt-get install -y dconf-cli
-#solarized/install.sh --install-dircolors
-
-## xterm truecolor italic support
-#for config in $DOTFILES/terminfo/*; do
-#    tic $config
-#done
-
-##############################
 ## Configuration
 ##############################
 echo -e "\n\nLinking configuration files"

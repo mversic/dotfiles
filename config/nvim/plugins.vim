@@ -80,6 +80,9 @@ Plug 'nelstrom/vim-visual-star-search'
 " Git diff indicators
 Plug 'mhinz/vim-signify'
 
+" Visually distinctive yanked lines
+Plug 'machakann/vim-highlightedyank'
+
 " Automatic closing of quotes, parenthesis, brackets, etc.
 Plug 'jiangmiao/auto-pairs'
 
@@ -96,6 +99,7 @@ Plug 'simnalamburt/vim-mundo', { 'on': ['MundoToggle'] }
 
 " 5. Language specific support {{{
 "----------------------------------------------------------------------------------------
+Plug 'mboughaba/i3config.vim'
 Plug 'cespare/vim-toml'
 Plug 'fatih/vim-go'             " TODO: It's used only for syntax highlighting
 " }}}
