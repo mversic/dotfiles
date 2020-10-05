@@ -246,10 +246,18 @@ highlight ALEWarningSign guibg=none
 highlight ALEErrorSign   guibg=none
 
 let g:ale_linters = {
+  \ 'rust': ['analyzer'],
+  \ 'java': ['javalsp'],
   \ 'python': ['pyls'],
-  \ 'rust': ['rls'],
   \ 'go': ['gopls'],
 \ }
+
+let g:ale_fixers = {
+  \ 'rust': ['rustfmt'],
+\}
+
+" Location of java language server executable
+let g:ale_java_javalsp_executable=$HOME . '/java-language-server/dist/lang_server_linux.sh'
 
 " Location of go language server executable
 let g:ale_go_gopls_executable = $HOME . '/go/bin/gopls'
@@ -280,6 +288,11 @@ call deoplete#custom#option({
   \ 'smart_case': v:true,
 \ })
 let g:UltiSnipsExpandTrigger="<C-Space>"
+
+" TODO: Fuzzy completion is not working with ALE, is it because of the lang server or ALE?
+call deoplete#custom#option('sources', {
+\ '_': ['ale'],
+\})
 
 " Don't abbreviate the list of suggested comletions
 call deoplete#custom#source('_', 'max_menu_width', 0)
