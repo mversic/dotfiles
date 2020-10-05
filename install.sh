@@ -13,10 +13,22 @@ cd "$TMP_DIR"
 #----------------------------------------------------------------------------------------
 sudo pacman -Syy
 
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
 sudo pacman -S --noconfirm alacritty
 sudo pacman -S --noconfirm ripgrep fd bat fzf # exa runiq ion watchexec
 sudo pacman -S --noconfirm tmux htop python-pip
-sudo pacman -S --noconfirm xsel i3-wm picom redshift
+sudo pacman -S --noconfirm redshift rust-analyzer
+
+
+# Brightness keys
+sudo pacman -S --no-confirm xorg-xbacklight
+
+# Sound managing
+sudo pacman -S --no-confirm pa-applet pavucontrol
+
+# Bluetooth
+sudo pacman -S --no-confirm blueman pulseaudio-bluetooth
 
 #----------------------------------------------------------------------------------------
 # Install and configure neoVIM
@@ -39,8 +51,7 @@ rm -rf $TMP_DIR
 install/init.sh
 
 # Optional
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-rustup component add rls rust-src #rust-analysis
+rustup component add rust-src #rust-analysis
 pip install 'python-language-server[all]'
 
 echo "Installation complete. Restart your computer"

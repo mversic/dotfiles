@@ -158,17 +158,4 @@ _fzf_compgen_dir() {
     fd --type=directory --hidden --follow --no-ignore --exclude ".git" . "$1"
 }
 
-# ----------------------------------
-# Tmux Configuration
-# ----------------------------------
-if command -v tmux > /dev/null; then
-    # Replace shell with "Main" tmux process
-    if [[ ! $TERM =~ screen ]] && [ -z $TMUX ]; then
-        if tmux has-session -t Main; then
-            exec tmux attach-session -t Main
-        else
-            exec tmux new-session -A -s Main -n Work
-        fi
-    fi
-fi
-
+export JAVA_HOME=/usr/lib/jvm/java-14-openjdk

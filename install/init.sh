@@ -21,6 +21,7 @@ fi
 if ! [[ $SHELL =~ .*zsh.* ]]; then
     echo "Setting ZSH as default shell:"
     chsh --shell $(which zsh)
+    echo "To use new shell restart session"
 fi
 
 ##############################
