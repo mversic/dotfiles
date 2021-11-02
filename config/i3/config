@@ -43,6 +43,10 @@ floating_modifier $mod
 # start a terminal
 bindsym $mod+Return exec alacritty -e tmux new-session -A -s Main -n Work
 
+# Screen brightness controls (TODO: Enable if required)
+# bindsym XF86MonBrightnessUp   exec "xbacklight -inc 10; notify-send 'brightness up'"
+# bindsym XF86MonBrightnessDown exec "xbacklight -dec 10; notify-send 'brightness down'"
+
 # kill focused window
 bindsym $mod+Shift+q kill
 

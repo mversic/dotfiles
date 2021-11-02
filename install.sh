@@ -34,7 +34,6 @@ sudo pacman -S --no-confirm blueman pulseaudio-bluetooth
 # Install and configure neoVIM
 #----------------------------------------------------------------------------------------
 sudo pacman -S --noconfirm neovim ctags
-sudo pacman -S --noconfirm python-pynvim
 
 #----------------------------------------------------------------------------------------
 # Colored git diff
@@ -52,7 +51,7 @@ install/init.sh
 
 # Optional
 rustup component add rust-src #rust-analysis
-pip install 'python-language-server[all]'
+sudo pacman -S --noconfirm pyright
 
 echo "Installation complete. Restart your computer"
 

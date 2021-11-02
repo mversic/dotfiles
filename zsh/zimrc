@@ -21,7 +21,7 @@ zmodule utility
 zmodule archive
 
 # Start ssh-agent
-#zmodule ssh
+zmodule ssh
 
 
 # -------

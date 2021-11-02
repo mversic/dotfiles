@@ -15,7 +15,7 @@ set showcmd                 " show command keypresses in command line
 set hidden                  " buffer can be put into background
 
 " toggle use of modelines. Modelines must be executed manually afterwards
-nnoremap <silent> <leader>ml :setlocal invmodeline <bar> doautocmd BufRead<cr>
+nnoremap <silent> <leader>ml :setlocal invmodeline <bar> doautocmd BufRead<CR>
 
 "" Avoid accidental quits with confirmation menu
 "cnoremap <silent> q<CR>  :call ConfirmQuit(0)<CR>
@@ -51,9 +51,12 @@ augroup configgroup
     autocmd! BufWritePost *vimrc,init.vim ++nested source % | redraw
 augroup END
 
+" Close quickfix/location list on selection
+autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
+
 " Visual representation of undotree
 "----------------------------------------------------------------------------------------
-nnoremap <silent> <leader>u :MundoToggle<cr>
+nnoremap <silent> <leader>u :MundoToggle<CR>
 let g:mundo_preview_bottom = 1
 let g:mundo_verbose_graph=0
 let g:mundo_right = 1
@@ -71,14 +74,6 @@ let g:solarized_termtrans=1
 colorscheme solarized8_high
 
 highlight CursorLine gui=underline guibg=none
-
-" Go syntax highlighting {{{
-let g:go_highlight_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_extra_types = 1
-let g:go_highlight_function_calls = 1
 " }}}
 " }}}
 
@@ -240,78 +235,87 @@ autocmd BufRead *vimrc,*init.vim,*plugins.vim setlocal foldmethod=marker foldlev
 
 " Linting-----------------------------------------------------------------------------{{{
 "----------------------------------------------------------------------------------------
-let g:ale_change_sign_column_color = 1
+lua <<EOF
+local nvim_lsp = require('lspconfig')
 
-highlight ALEWarningSign guibg=none
-highlight ALEErrorSign   guibg=none
+local servers = {
+    'rust_analyzer',
+    'pyright',
+    'gopls',
+}
 
-let g:ale_linters = {
-  \ 'rust': ['analyzer'],
-  \ 'java': ['javalsp'],
-  \ 'python': ['pyls'],
-  \ 'go': ['gopls'],
-\ }
+for _, lsp in ipairs(servers) do
+    nvim_lsp[lsp].setup {
+        on_attach = on_attach,
+    }
+end
 
-let g:ale_fixers = {
-  \ 'rust': ['rustfmt'],
-\}
+require('rust-tools').setup({})
+EOF
 
-" Location of java language server executable
-let g:ale_java_javalsp_executable=$HOME . '/java-language-server/dist/lang_server_linux.sh'
+nnoremap <silent> <space>R <cmd>lua vim.lsp.buf.rename()<CR>
 
-" Location of go language server executable
-let g:ale_go_gopls_executable = $HOME . '/go/bin/gopls'
+" Code navigation shortcuts
+nnoremap <silent> ]w <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
+nnoremap <silent> [w <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
 
-" List both test and examples for rust
-let g:ale_rust_cargo_check_tests = 1
-let g:ale_rust_cargo_check_examples = 1
+nnoremap <silent> gr    <cmd>Telescope lsp_references<CR>
+nnoremap <silent> g0    <cmd>Telescope lsp_type_definitions<CR>
+nnoremap <silent> gi    <cmd>Telescope lsp_implementations<CR>
+nnoremap <silent> gd    <cmd>Telescope lsp_definitions<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
 
-" Disable vim-go autocompletion and lint
-let g:go_code_completion_enabled = 0
-let g:go_gopls_enabled = 0
-let g:go_fmt_autosave = 0
-let g:go_echo_go_info = 0
+" List all symbols in the document/workspace
+nnoremap <silent> gw <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
-" Position cursor to next error
-nmap [w <plug>(ale_previous_wrap)
-nmap ]w <plug>(ale_next_wrap)
+" Format source code in the current buffer
+nnoremap <silent> <leader>f <cmd>lua vim.lsp.buf.formatting()<CR>
 " }}}
 
 " Autocompletion----------------------------------------------------------------------{{{
 "----------------------------------------------------------------------------------------
-" TODO: This is a good feature, but needs to be made context aware
-" Issue tracker (https://github.com/jiangmiao/auto-pairs/issues/270)
-let g:AutoPairsMultilineClose = 0
+lua <<EOF
+local cmp = require('cmp')
 
-let g:deoplete#enable_at_startup = 1
-call deoplete#custom#option({
-  \ 'smart_case': v:true,
-\ })
-let g:UltiSnipsExpandTrigger="<C-Space>"
+cmp.setup({
+    completion = {completeopt = 'menu,menuone,noinsert'},
 
-" TODO: Fuzzy completion is not working with ALE, is it because of the lang server or ALE?
-call deoplete#custom#option('sources', {
-\ '_': ['ale'],
-\})
+    sources = {
+        { name = 'nvim_lsp' },
+        { name = 'buffer' },
+    },
 
-" Don't abbreviate the list of suggested comletions
-call deoplete#custom#source('_', 'max_menu_width', 0)
-call deoplete#custom#source('_', 'max_abbr_width', 0)
-call deoplete#custom#source('_', 'max_kind_width', 0)
+    mapping = {
+        ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+        ['<Tab>']   = cmp.mapping.select_next_item(),
+        ['<C-u>']   = cmp.mapping.scroll_docs(-4),
+        ['<C-d>']   = cmp.mapping.scroll_docs(4),
+        ['<C-q>']   = cmp.mapping.close(),
+        ['<CR>']    = cmp.mapping.confirm(),
+    },
+})
 
-" Navigate completion menu with Tab
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+-- Use buffer source for `/`.
+-- cmp.setup.cmdline('/', {
+--     sources = {
+--         { name = 'buffer' }
+--     }
+-- })
 
-" Disable autocompletion in Comment/String syntaxes
-call deoplete#custom#source('_', 'disabled_syntaxes', ['Comment', 'String'])
+-- -- Use cmdline & path source for ':'.
+-- cmp.setup.cmdline(':', {
+--     sources = cmp.config.sources({
+--         { name = 'path' }
+--     }, {
+--         { name = 'cmdline' }
+--     })
+-- })
 
-" TODO: Is this fine?
-" Disable context aware autocompletion, use only language keyword completion
-call deoplete#custom#option('ignore_sources', {'_': ['around', 'buffer']})
-
-" Autoclose preview window after autocompletion
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
+require('nvim-autopairs').setup{}
+EOF
 
 " set complete=.,w,b,u,t
 "set completeopt+=longest
@@ -343,31 +347,26 @@ set wildignorecase              " ignore case in command line completion
 "----------------------------------------------------------------------------------------
 let g:rooter_silent_chdir = 1
 
-"Close vim if only NERD tree is open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree")
-  \ && b:NERDTree.isTabTree()) | q | endif
-
-let NERDTreeShowHidden = 1
-
-let NERDTreeDirArrowExpandable = '▸'
-let NERDTreeDirArrowCollapsible = '▿'
-
-let NERDTreeIgnore = ['\~$', '.*\.pyc$', '^\.\?tags.*']
-
-" NERDTree syntax highlight (separate plugin)
-let g:NERDTreeFileExtensionHighlightFullName = 1
-let g:NERDTreePatternMatchHighlightFullName = 1
-let g:NERDTreeExactMatchHighlightFullName = 1
-
 " Automatic generation of tags
 let g:gutentags_project_root = ['.root']
 let g:gutentags_ctags_tagfile = '.tags'
 
-nnoremap <silent> <leader>n :NERDTreeFind<CR> :set scl=no<CR>
-nnoremap <silent> <C-n> :NERDTreeToggleVCS<CR> :set scl=no<CR>
+lua <<EOF
+require'nvim-tree'.setup {
+    view = {
+        hide_root_folder = true,
+    },
 
-nnoremap <silent> <leader>] :ALEGoToDefinition<CR>
-nnoremap <silent> <leader>d :ALEFindReferences<CR>
+    filters = {
+        dotfiles = true,
+        --- TODO: add custom filters once patterns are available
+        --- custom = { '.*~', '.*\.pyc$', '^\.\?tags.*' }
+    },
+}
+EOF
+
+nnoremap <silent> <C-n>     :NvimTreeToggle<CR>
+nnoremap <silent> <leader>n :NvimTreeFindFile<CR>
 " }}}
 
 " Searching --------------------------------------------------------------------------{{{
@@ -394,35 +393,20 @@ endif
 
 " ↳ Fuzzy file finder {{{
 "----------------------------------------------------------------------------------------
-let g:fzf_prefer_tmux = 1
-
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(
-    \ <q-args>,
-    \ {'options': ['--info=inline', '--preview', 'bat {} --color=always']},
-    \ <bang>0
-\ )
-
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --no-heading --line-number --column --hidden --follow --color=always '.shellescape(<q-args>),
-  \ 1, fzf#vim#with_preview(), <bang>0
-\ )
-
-let g:fzf_action = {
-  \ 'ctrl-s': 'split',
-  \ 'ctrl-v': 'vsplit',
-  \ 'ctrl-t': 'tab split'
-\ }
-
 " List all files in project directory
-nnoremap <silent> <leader>e :<C-l>Files<cr>
+nnoremap <silent> <leader>e <cmd>Telescope find_files<CR>
 
 " List and select all active buffers
-nnoremap <silent> <leader>b :Buffers<cr>
+nnoremap <silent> <leader>b <cmd>Telescope buffers<CR>
 
-" Search for all occurrences of word under cursor
-nnoremap <silent> <leader>r :Rg <C-R><C-W><CR>
+" Search for all references to the word under cursor
+nnoremap <silent> <leader>r <cmd>Telescope grep_string<CR>
+
+" Open interface for live grepping
+nnoremap <silent> <leader>g <cmd>Telescope live_grep<CR>
+
+nnoremap <silent> <leader>fh <cmd>Telescope help_tags<CR>
+nnoremap <silent> <leader>fl <cmd>Telescope git_files<CR>
 
 " TODO: Trying out
 "nnoremap <silent> <leader>: :Commands<CR>
@@ -430,10 +414,10 @@ nnoremap <silent> <leader>r :Rg <C-R><C-W><CR>
 
 "if isdirectory(".git")
 "    " if in a git project, use :GFiles
-"    nmap <silent> <leader>t :GFiles<cr>
+"    nmap <silent> <leader>t :GFiles<CR>
 "else
 "    " otherwise, use :FZF
-"    nmap <silent> <leader>t :FZF<cr>
+"    nmap <silent> <leader>t :FZF<CR>
 "endif
 
 "" Insert mode completion
@@ -451,26 +435,26 @@ highlight DiffChange guibg=none
 highlight DiffDelete guibg=none
 
 " Fugitive Shortcuts
-"nmap <silent> <leader>gs :Gstatus<cr>
-"nmap <leader>ge :Gedit<cr>
-"nmap <silent><leader>gr :Gread<cr>
-"nmap <silent><leader>gb :Gblame<cr>
+"nmap <silent> <leader>gs :Gstatus<CR>
+"nmap <leader>ge :Gedit<CR>
+"nmap <silent><leader>gr :Gread<CR>
+"nmap <silent><leader>gb :Gblame<CR>
 "
-"nmap <leader>m :MarkedOpen!<cr>
-"nmap <leader>mq :MarkedQuit<cr>
-"nmap <leader>* *<c-o>:%s///gn<cr>
+"nmap <leader>m :MarkedOpen!<CR>
+"nmap <leader>mq :MarkedQuit<CR>
+"nmap <leader>* *<c-o>:%s///gn<CR>
 
 "
-"nnoremap <leader>gd :Gdiff<cr>
-"nnoremap <leader>gs :Gstatus<cr>
-"nnoremap <leader>gw :Gwrite<cr>
-"nnoremap <leader>ga :Gadd<cr>
-"nnoremap <leader>gb :Gblame<cr>
-"nnoremap <leader>gco :Gcheckout<cr>
-"nnoremap <leader>gci :Gcommit<cr>
-"nnoremap <leader>gm :Gmove<cr>
-"nnoremap <leader>gr :Gremove<cr>
-"nnoremap <leader>gl :Shell git gl -18<cr>:wincmd \|<cr>
+"nnoremap <leader>gd :Gdiff<CR>
+"nnoremap <leader>gs :Gstatus<CR>
+"nnoremap <leader>gw :Gwrite<CR>
+"nnoremap <leader>ga :Gadd<CR>
+"nnoremap <leader>gb :Gblame<CR>
+"nnoremap <leader>gco :Gcheckout<CR>
+"nnoremap <leader>gci :Gcommit<CR>
+"nnoremap <leader>gm :Gmove<CR>
+"nnoremap <leader>gr :Gremove<CR>
+"nnoremap <leader>gl :Shell git gl -18<CR>:wincmd \|<CR>
 "
 "augroup ft_fugitive
 "    au!
@@ -479,12 +463,12 @@ highlight DiffDelete guibg=none
 "augroup END
 "
 "" "Hub"
-"vnoremap <leader>H :Gbrowse<cr>
-"nnoremap <leader>H V:Gbrowse<cr>
+"vnoremap <leader>H :Gbrowse<CR>
+"nnoremap <leader>H V:Gbrowse<CR>
 "
 "" "(Upstream) Hub"
-"vnoremap <leader>u :Gbrowse @upstream<cr>
-"nnoremap <leader>u V:Gbrowse @upstream<cr>
+"vnoremap <leader>u :Gbrowse @upstream<CR>
+"nnoremap <leader>u V:Gbrowse @upstream<CR>
 "
 "" Highlight VCS conflict markers
 "match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
@@ -500,8 +484,8 @@ nnoremap <silent> <expr> k  v:count ?  'k' : 'gk'
 nnoremap <silent> <expr> gj v:count ? 'gj' :  'j'
 nnoremap <silent> <expr> gk v:count ? 'gk' :  'k'
 
-"nnoremap <leader>( :tabprev<cr>        " Move to next tab
-"nnoremap <leader>) :tabnext<cr>        " Move to previous tab
+"nnoremap <leader>( :tabprev<CR>        " Move to next tab
+"nnoremap <leader>) :tabnext<CR>        " Move to previous tab
 " }}}
 
 " ↳ Yanking and pasting {{{
@@ -530,7 +514,7 @@ nmap <leader>P "+P
 " TODO: Make up mapping for updating instead of writing
 
 " Enable repeat command in visual mode
-vmap . :normal .<cr>
+vmap . :normal .<CR>
 
 " Move to the begining of the line
 cnoremap <C-a> <C-b>
@@ -539,7 +523,7 @@ cnoremap <C-a> <C-b>
 nmap <leader>. <c-^>
 
 " Wipeout buffer
-"nmap <leader>x :bw<cr>
+"nmap <leader>x :bw<CR>
 " }}}
 " }}}
 
@@ -548,3 +532,24 @@ nmap <leader>. <c-^>
 set errorbells
 set visualbell
 
+" TODO: This should find usages of function in combination with ctags
+"" cscope
+"function! Cscope(option, query)
+"  let color = '{ x = $1; $1 = ""; z = $3; $3 = ""; printf "\033[34m%s\033[0m:\033[31m%s\033[0m\011\033[37m%s\033[0m\n", x,z,$0; }'
+"  let opts = {
+"  \ 'source':  "cscope -dL" . a:option . " " . a:query . " | awk '" . color . "'",
+"  \ 'options': ['--ansi', '--prompt', '> ',
+"  \             '--multi', '--bind', 'alt-a:select-all,alt-d:deselect-all',
+"  \             '--color', 'fg:188,fg+:222,bg+:#3a3a3a,hl+:104'],
+"  \ 'down': '40%'
+"  \ }
+"  function! opts.sink(lines)
+"    let data = split(a:lines)
+"    let file = split(data[0], ":")
+"    execute 'e ' . '+' . file[1] . ' ' . file[0]
+"  endfunction
+"  call fzf#run(opts)
+"endfunction
+"
+"" Invoke command. 'g' is for call graph, kinda.
+"nnoremap <silent> <Leader>g :call Cscope('3', expand('<cword>'))<CR>

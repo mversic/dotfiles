@@ -33,18 +33,22 @@ Plug 'bling/vim-bufferline'
 
 "  2. Lint and autocompletion {{{
 "----------------------------------------------------------------------------------------
-Plug 'dense-analysis/ale'
-Plug 'Shougo/deoplete.nvim'
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/nvim-cmp'
 
-" Snippet support
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
 " }}}
 
 "  3. Project navigation {{{
 "----------------------------------------------------------------------------------------
 " Fuzzy file finder
-Plug 'junegunn/fzf.vim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-lua/plenary.nvim'
+" TODO: Is this required?
+Plug 'nvim-lua/popup.nvim'
 
 " Automatic tag generation
 Plug 'ludovicchabant/vim-gutentags'
@@ -52,9 +56,9 @@ Plug 'ludovicchabant/vim-gutentags'
 " View registers by pressing "
 Plug 'junegunn/vim-peekaboo'
 
-Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggleVCS', 'NERDTreeFind'] }
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-"Plug 'Xuyuanp/nerdtree-git-plugin'     TODO: Is this bloat?
+" File explorer tree
+Plug 'kyazdani42/nvim-tree.lua'
+Plug 'kyazdani42/nvim-web-devicons'
 
 " Define project root as working dir
 Plug 'airblade/vim-rooter'
@@ -84,13 +88,13 @@ Plug 'mhinz/vim-signify'
 Plug 'machakann/vim-highlightedyank'
 
 " Automatic closing of quotes, parenthesis, brackets, etc.
-Plug 'jiangmiao/auto-pairs'
+Plug 'windwp/nvim-autopairs'
 
 " TODO: Configure
 " Smooth scrolling with <C-u> and <C-d>
 Plug 'yuttie/comfortable-motion.vim'
 
-" This is slow. It's used rarely and loaded on demand
+" TODO: This is slow. It's used rarely and loaded on demand
 Plug 'simnalamburt/vim-mundo', { 'on': ['MundoToggle'] }
 
 "TODO: Use if folding is slow
@@ -99,9 +103,9 @@ Plug 'simnalamburt/vim-mundo', { 'on': ['MundoToggle'] }
 
 " 5. Language specific support {{{
 "----------------------------------------------------------------------------------------
+Plug 'simrat39/rust-tools.nvim'
 Plug 'mboughaba/i3config.vim'
 Plug 'cespare/vim-toml'
-Plug 'fatih/vim-go'             " TODO: It's used only for syntax highlighting
 " }}}
 
 " TODO: Interesting plugins

@@ -38,7 +38,7 @@ for config in "$DOTFILES"/config/*; do
     target=$HOME/.config/$( basename $config )
 
     if [ -e "$target" ]; then
-	rm -rf $target
+        rm -rf $target
     fi
 
     ln -s $config $target
