@@ -256,8 +256,8 @@ EOF
 nnoremap <silent> <space>R <cmd>lua vim.lsp.buf.rename()<CR>
 
 " Code navigation shortcuts
-nnoremap <silent> ]w <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
-nnoremap <silent> [w <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
+nnoremap <silent> ]w <cmd>lua vim.diagnostic.goto_next()<CR>
+nnoremap <silent> [w <cmd>lua vim.diagnostic.goto_prev()<CR>
 
 nnoremap <silent> gr    <cmd>Telescope lsp_references<CR>
 nnoremap <silent> g0    <cmd>Telescope lsp_type_definitions<CR>
@@ -272,7 +272,7 @@ nnoremap <silent> gw <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
 " Format source code in the current buffer
-nnoremap <silent> <leader>f <cmd>lua vim.lsp.buf.formatting()<CR>
+nnoremap <silent> <leader>f <cmd>lua vim.lsp.buf.format()<CR>
 " }}}
 
 " Autocompletion----------------------------------------------------------------------{{{
